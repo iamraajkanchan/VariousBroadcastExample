@@ -1,4 +1,4 @@
-package com.chinky.family
+package com.chinky.family.activities
 
 import android.content.Intent
 import android.content.IntentFilter
@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.chinky.family.R
 import com.chinky.family.broadcast.AirplaneModeListener
 import com.chinky.family.broadcast.AirplaneModeReceiver
 import com.chinky.family.broadcast.ConnectivityChangeListener
