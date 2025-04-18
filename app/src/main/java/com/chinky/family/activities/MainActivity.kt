@@ -1,7 +1,10 @@
 package com.chinky.family.activities
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Intent
 import android.content.IntentFilter
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -13,6 +16,7 @@ import com.chinky.family.broadcast.AirplaneModeListener
 import com.chinky.family.broadcast.AirplaneModeReceiver
 import com.chinky.family.broadcast.ConnectivityChangeListener
 import com.chinky.family.broadcast.ConnectivityChangeReceiver
+import com.chinky.family.services.MusicService
 import com.chinky.family.utility.Utility
 
 class MainActivity : AppCompatActivity(), ConnectivityChangeListener, AirplaneModeListener {
@@ -41,6 +45,8 @@ class MainActivity : AppCompatActivity(), ConnectivityChangeListener, AirplaneMo
         registerReceiver(airplaneModeReceiver, airplaneModeFilter)
         val connectivityChangeFilter = IntentFilter("android.net.conn.CONNECTIVITY_CHANGE")
         registerReceiver(connectivityChangeReceiver, connectivityChangeFilter)
+        createNotificationChannel()
+        startService(Intent(this, MusicService::class.java))
     }
 
 
@@ -48,6 +54,22 @@ class MainActivity : AppCompatActivity(), ConnectivityChangeListener, AirplaneMo
         super.onPause()
         unregisterReceiver(airplaneModeReceiver)
         unregisterReceiver(connectivityChangeReceiver)
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                "music_channel",
+                "Music Playback Channel",  // User-visible name
+                NotificationManager.IMPORTANCE_HIGH // Importance level
+            )
+            channel.description = "This channel is used for music playback"
+
+            val manager = getSystemService(
+                NotificationManager::class.java
+            )
+            manager?.createNotificationChannel(channel)
+        }
     }
 
     override fun onConnectivityChangeBroadcastReceived(intent: Intent) {
